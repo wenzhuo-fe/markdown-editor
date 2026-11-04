@@ -4,6 +4,10 @@ import Header from './components/Header.vue'
 import Editor from './components/Editor.vue'
 import Preview from './components/Preview.vue'
 import { ref } from 'vue';
+
+
+
+
 const editorRef = ref<InstanceType<typeof Editor> | null>(null)
 
 const handleBold = () => {
@@ -22,13 +26,25 @@ const handlestrikethrough = () => {
   editorRef.value?.strikethrough()
 }
 
+const handleSubscript = () => {
+  editorRef.value?.subscript()
+}
+
+const handleSuperscript = () => {
+  editorRef.value?.superscript()
+}
+
+const handleBlockquote = () => {
+  editorRef.value?.blockquote()
+}
+
 </script>
 
 <template>
   <div class="editor-layout">
     <!-- 顶部工具栏 -->
     <header class="editor-header">
-      <Header @bold="handleBold" @underline="handleunderLine" @italic="handleitalic" @strikethrough="handlestrikethrough" />
+      <Header @bold="handleBold" @underline="handleunderLine" @italic="handleitalic" @strikethrough="handlestrikethrough"   @subscript="handleSubscript"  @superscript="handleSuperscript" @blockquote="handleBlockquote"  :title="editorRef?.title"  />
     </header>
 
     <!-- 左右编辑区域 -->

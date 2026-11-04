@@ -47,8 +47,59 @@ renderer.code = ({ text, lang }) => {
   return `<pre><code>${text}</code></pre>`
 }
 
+// 解决上标下标的解析问题
+marked.use({
+  extensions: [
+    {
+      name: 'subscript',
+      level: 'inline',
 
+      start(src) {
+        return src.indexOf('~')
+      },
 
+      tokenizer(src) {
+        const match = /^~(?!~)([^~\n]+)~(?!~)/.exec(src)
+
+        if (match) {
+          return {
+            type: 'subscript',
+            raw: match[0],
+            text: match[1] ?? ''
+          }
+        }
+      },
+
+      renderer(token) {
+        return `<sub>${token.text ?? ''}</sub>`
+      }
+    },
+    {
+      name: 'superscript',
+      level: 'inline',
+
+      start(src) {
+        return src.indexOf('^')
+      },
+
+      tokenizer(src) {
+        const match = /^\^([^^\n]+)\^/.exec(src)
+
+        if (match) {
+          return {
+            type: 'superscript',
+            raw: match[0],
+            text: match[1] ?? ''
+          }
+        }
+      },
+
+      renderer(token) {
+        return `<sup>${token.text ?? ''}</sup>`
+      }
+    }
+  ]
+})
 
 marked.use({ renderer })
 
@@ -145,6 +196,13 @@ onUnmounted(() => disposeCharts())
     line-height: 1.8;
     overflow-wrap: break-word;
     background: #fff;
+    :deep(blockquote) {
+  margin: 12px 0;
+  padding: 8px 16px;
+  border-left: 4px solid #409eff;
+  background: #f5f6f7;
+  color: #666;
+}
   }
 }
 </style>

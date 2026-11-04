@@ -19,12 +19,12 @@ export const usedocumentStore = defineStore('document', () => {
 //  computed动态计算当前选中目标
   const activeDocument = computed(() => documentList.value.find(item => item.id === activeId.value) ?? defaultDocument)
 
-  
-
  return {
   defaultDocument,
   documentList,
   activeId,
   activeDocument
  }
+},{
+  persist:true
 })
